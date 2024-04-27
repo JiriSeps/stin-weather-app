@@ -15,33 +15,39 @@ body {
   color: #000000;
   margin: 0 auto 0;
   border-radius: 15px;
-  padding: 20px 20px;
+  padding: 50px 20px;
   text-align: center;
 }
 
-.search {
+.search-container {
   width: 50%; /* Set the width to 50% to center it */
-  margin: 0 auto; /* Center the search bar horizontally */
+  margin: 0 auto; /* Center the search container horizontally */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center the search bar horizontally */
 }
 
-.search select,
-.search input {
-  border-style: solid;
-  border-color: #cfcfcf;
+.search-input {
+  border: 1px solid #cfcfcf;
   outline: 0;
   background: rgba(150, 150, 150, 0.3);
   color: #ffffff;
-  padding-left: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  height: 30px;
-  width: 100%;
-  font-size: 2vmin;
-  text-align: left;
+  padding: 10px;
+  height: 20px; /* Adjust the height as needed */
+  font-size: 1.6vmin; /* Adjust the font size as needed */
+  margin-right: 10px; /* Add margin to separate the search bar and favorites */
 }
+
+.favs {
+  border: 1px solid #cfcfcf;
+  outline: 0;
+  background: rgba(150, 150, 150, 0.3);
+  color: #ffffff;
+  padding: 10px;
+  height: 20px; /* Adjust the height as needed */
+  font-size: 1.6vmin; /* Adjust the font size as needed */
+}
+
 
 .weather-icon {
   width: 20vmin;
@@ -57,7 +63,7 @@ body {
 .weather h2 {
   font-size: 12vmin;
   font-weight: 200;
-  margin-top: 10vh;
+  margin-top: 5vh;
   margin-bottom: 5vh;
 }
 
@@ -140,7 +146,6 @@ body {
 .head input {
   border-style: solid;
   border-color: #cfcfcf;
-  border-radius: 20px;
   outline: 0;
   background: rgba(150, 150, 150, 0.3);
   color: #ffffff;
@@ -148,7 +153,7 @@ body {
   padding-top: 1vmin;
   padding-bottom: 1vmin;
   height: 3vmin;
-  width: 25vmin;
+  width: 30vmin;
   flex: 1;
   margin-left: 20px;
   margin-bottom: 10px;
@@ -158,13 +163,20 @@ body {
 .head button {
   border-style: solid;
   border-color: #cfcfcf;
-  border-radius: 10px;
+  border-radius: 0px;
   outline: 0;
   background: rgba(150, 150, 150, 0.3);
   color: white;
-  margin-top: 1vmin;
-  margin-bottom: 3vmin;
+  margin-top: 2vmin;
+  margin-bottom: 2vmin;
   margin-right: 10vmin;
+  margin-left: -10vmin;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.head button:hover {
+  background: rgba(150, 150, 150, 0.5);
 }
 
 .bot {
