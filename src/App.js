@@ -16,6 +16,7 @@ import rainImage from './assets/rain.png'
 import usersData from './users.json';
 import hamburgerImage from './assets/hamburger.png'
 import './index.css'; // Import CSS file
+import './currentDate.js';
 import { apiKey, apiAdress, historyApi, historyApiSet } from './api';
 
 
@@ -34,37 +35,7 @@ function App() {
   const [weatherImage, setWeatherImage] = useState({ sunImage });
   const [long, setLong] = useState("");
   const [lat, setLat] = useState("");
-  const [maxTemp, setMaxTemp] = useState("");
-  const [minTemp, setMinTemp] = useState("");
-  const [precipitation, setPrecipitation] = useState("")
-  const [rain, setRain] = useState("")
-  const [shower, setShower] = useState("")
-  const [snow, setSnow] = useState("")
   const [weatherHistory, setWeatherHistory] = useState([]);
-
-  const {
-    Day,
-    Month,
-    Year,
-    Day2,
-    Month2,
-    Year2,
-    Day3,
-    Month3,
-    Year3,
-    Day4,
-    Month4,
-    Year4,
-    Day5,
-    Month5,
-    Year5,
-    Day6,
-    Month6,
-    Year6,
-    Day7,
-    Month7,
-    Year7
-  } = require('./currentDate');
 
   const setFavs = () => {
     const user = usersData.users.find(user => user.username === userName);
