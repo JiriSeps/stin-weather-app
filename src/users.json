@@ -1,0 +1,16 @@
+{
+    "users": [
+      {
+        "username": "admi",
+        "password": "admi",
+        "pay": "yes",
+        "favorites": ["Prague", "London", "New York"]
+      },
+      {
+        "username": "admin",
+        "password": "admin",
+        "pay": "no",
+        "favorites": ["Paris", "Berlin", "Tokyo"]
+      }
+    ]
+  }
