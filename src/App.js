@@ -40,7 +40,8 @@ function App() {
   const [rain, setRain] = useState("")
   const [shower, setShower] = useState("")
   const [snow, setSnow] = useState("")
-  
+  const [weatherHistory, setWeatherHistory] = useState([]);
+
   const {
     Day,
     Month,
@@ -150,6 +151,7 @@ function App() {
     setUser("")
     setHead(login)
   }
+  
   
   const handlePayment = () => {
     const cardInput = document.getElementById('cardnumber');
@@ -296,84 +298,69 @@ function App() {
   }, [searchedCity]);
 
   useEffect(() => {
-    const historyApiUrl = `${historyApi}latitude=${lat}&longitude=${long}${historyApiSet}start_date=${Year7}-${Month7}-${Day7}&end_date=${Year}-${Month}-${Day}`
-    fetch(historyApiUrl)
-      .then(historyResponse => {
-        if (!historyResponse.ok) {
+    const fetchData = async () => {
+      const historyData = [];
+      for (let i = 0; i < 7; i++) {
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() - i - 1); // Subtract i + 1 days to get historical dates
+        const year = currentDate.getFullYear();
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = currentDate.getDate().toString().padStart(2, '0');
+  
+        const historyApiUrl = `${historyApi}latitude=${lat}&longitude=${long}${historyApiSet}start_date=${year}-${month}-${day}&end_date=${year}-${month}-${day}`;
+        const response = await fetch(historyApiUrl);
+        if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        return historyResponse.json();
-      })
-      .then(historyData => {
-        setMaxTemp(historyData.daily.temperature_2m_max);
-        setMinTemp(historyData.daily.temperature_2m_min);
-        setPrecipitation(historyData.daily.precipitation_sum)
-        setRain(historyData.daily.rain_sum)
-        setShower(historyData.daily.showers_sum)
-        setSnow(historyData.daily.snowfall_sum)
-      })
-      .catch(error => {
-        console.error('Chyba při získávání dat:', error);
-      });
-  }, [long, lat, Day, Month, Year, Day7, Month7, Year7]);
-
-  var table = <div className="history">
-    <table className="historyTable" border="1">
-      <thead>
-        <tr>
-          <th className="date">Datum</th>
-          <th className="highTemp">Max. teplota</th>
-          <th className="lowTemp">Min. teplota</th>
-          <th className="rain">Srážky</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{Day}.{Month}.{Year}</td>
-          <td>{maxTemp[6]} °C</td>
-          <td>{minTemp[6]} °C</td>
-          <td>{(precipitation[6] + rain[6] + shower[6] + snow[6]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day2}.{Month2}.{Year2}</td>
-          <td>{maxTemp[5]} °C</td>
-          <td>{minTemp[5]} °C</td>
-          <td>{(precipitation[5] + rain[5] + shower[5] + snow[5]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day3}.{Month3}.{Year3}</td>
-          <td>{maxTemp[4]} °C</td>
-          <td>{minTemp[4]} °C</td>
-          <td>{(precipitation[4] + rain[4] + shower[4] + snow[4]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day4}.{Month4}.{Year4}</td>
-          <td>{maxTemp[3]} °C</td>
-          <td>{minTemp[3]} °C</td>
-          <td>{(precipitation[3] + rain[3] + shower[3] + snow[3]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day5}.{Month5}.{Year5}</td>
-          <td>{maxTemp[2]} °C</td>
-          <td>{minTemp[2]} °C</td>
-          <td>{(precipitation[2] + rain[2] + shower[2] + snow[2]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day6}.{Month6}.{Year6}</td>
-          <td>{maxTemp[1]} °C</td>
-          <td>{minTemp[1]} °C</td>
-          <td>{(precipitation[1] + rain[1] + shower[1] + snow[1]).toFixed(1)} mm</td>
-        </tr>
-        <tr>
-          <td>{Day7}.{Month7}.{Year7}</td>
-          <td>{maxTemp[0]} °C</td>
-          <td>{minTemp[0]} °C</td>
-          <td>{(precipitation[0] + rain[0] + shower[0] + snow[0]).toFixed(1)} mm</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+        const data = await response.json();
+        historyData.push({
+          date: `${day}.${month}.${year}`,
+          maxTemp: data.daily.temperature_2m_max,
+          minTemp: data.daily.temperature_2m_min,
+          precipitation: parseFloat(data.daily.precipitation_sum),
+          rain: parseFloat(data.daily.rain_sum),
+          shower: parseFloat(data.daily.showers_sum),
+          snow: parseFloat(data.daily.snowfall_sum)
+        });
+      }
+      setWeatherHistory(historyData.reverse()); // Reverse the array to display the oldest date first
+    };
+  
+    fetchData().catch(error => {
+      console.error('Chyba při získávání dat:', error);
+    });
+  }, [lat, long]);
+  
+  
+  const renderTableRows = () => {
+  return weatherHistory.map((data, index) => (
+    <tr key={index}>
+      <td>{data.date}</td>
+      <td>{data.maxTemp} °C</td>
+      <td>{data.minTemp} °C</td>
+      <td>{(data.precipitation + data.rain + data.shower + data.snow).toFixed(1)} mm</td>
+      </tr>
+    ));
+  };
+  
+  var table = (
+    <div className="history">
+      <table className="historyTable" border="1">
+        <thead>
+          <tr>
+            <th className="date">Datum</th>
+            <th className="highTemp">Max. teplota</th>
+            <th className="lowTemp">Min. teplota</th>
+            <th className="rain">Srážky</th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderTableRows()}
+        </tbody>
+      </table>
+    </div>
+  );
+  
   if (user === "") {
     return (
       <div className="block">
