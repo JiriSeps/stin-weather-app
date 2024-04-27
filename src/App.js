@@ -70,12 +70,15 @@ function App() {
     const user = usersData.users.find(user => user.username === userName);
     const favorites = user.favorites;
     const options = favorites.map(item => <option key={item}>{item}</option>);
+    // Return the select element with the styled options
     const selectElement = (
-      <select>
-        <option>---</option>
+      <select className="favorites-select">
+        <option></option>
         {options}
       </select>
     );
+  
+    // Render the select element
     setFavorites(selectElement);
   }
   
@@ -388,8 +391,8 @@ function App() {
           </div>
         )}
         {head}
-        <div className="search">
-          <input type="text" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
         </div>
         <div className="weather">
           <h2 className="city">{city}</h2>
@@ -419,9 +422,9 @@ function App() {
     return (
       <div className="block">
         {head}
-        <div className="search">
-          <input type="text" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
-          <div className="favs">
+        <div class="search-container">
+          <input type="text" class="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
+          <div class="favs">
             {favorites}
           </div>
         </div>
