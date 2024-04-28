@@ -36,6 +36,7 @@ function App() {
   const [long, setLong] = useState("");
   const [lat, setLat] = useState("");
   const [weatherHistory, setWeatherHistory] = useState([]);
+  
 
   const setFavs = () => {
     const user = usersData.users.find(user => user.username === userName);
@@ -52,6 +53,11 @@ function App() {
     // Render the select element
     setFavorites(selectElement);
   }
+
+  const setFavoritesButton = (
+    <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
+  );
+  
   
   // Function to handle menu toggle
   const handleMenuToggle = () => {
@@ -400,7 +406,7 @@ function App() {
           </div>
         </div>
         <div className="weather">
-          <h2 className="city">{city}</h2>
+          <h2 className="city">{city}{setFavoritesButton}</h2>
           <img src={weatherImage} className="weather-icon" alt=""></img>
           <h1 className="temp">{temperature}</h1>
           <div className="details">

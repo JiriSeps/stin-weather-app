@@ -49,6 +49,28 @@ body {
 }
 
 
+.weather {
+  position: relative; /* Make the container relative to position the button */
+}
+
+.set-favorites-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 6vh; /* Adjust to align with the text */
+  background-color: #007bff; /* Example button color */
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.set-favorites-btn:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+
+
 .weather-icon {
   width: 20vmin;
   margin-top: -50px;
