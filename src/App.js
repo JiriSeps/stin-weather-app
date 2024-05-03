@@ -18,6 +18,7 @@ import hamburgerImage from './assets/hamburger.png'
 import './index.css'; // Import CSS file
 import './currentDate.js';
 import { apiKey, apiAdress, historyApi, historyApiSet } from './api';
+import axios from 'axios';
 
 
 var userName = "";
@@ -103,27 +104,28 @@ function App() {
   const handleRegistration = () => {
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-  
+    
     const username = usernameInput.value;
-    const userExists = usersData.users.find(user => user.username === username);
+    const password = passwordInput.value;
   
-    if (userExists) {
-      alert('Uživatelské jméno již existuje. Přihlaste se nebo zvolte jiné.');
-    }
-    else if (usernameInput.value.length < 4) {
-      alert("Uživatelské jméno musí být dlouhé alespoň 4 znaky.")
-    }
-    else if (passwordInput.value.length < 5) {
-      alert("Heslo musí být dlouhé alespoň 5 znaků.")
-    }
-    else {
-      userName = usernameInput.value;
-      usernameInput.value = '';
-      passwordInput.value = '';
-      setHead(payment);
-      setMenuOpen(false); // Close the menu
-      setLoginVisible(false); // Hide login menu
-    }
+    // Send registration data to server
+    axios.post('http://localhost:8081/register', {
+      username,
+      password
+    })
+    .then(response => {
+      if (response.status === 201) {
+        // Handle successful registration, e.g., redirect to another page
+        window.location.href = '/success';
+      } else {
+        // Handle registration error
+        alert('Registration failed. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error during registration:', error);
+      alert('An error occurred during registration.');
+    });
   };
 
   const handleLogout = () => {
