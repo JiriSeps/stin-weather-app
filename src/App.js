@@ -40,7 +40,7 @@ function App() {
   
 
   const setFavs = () => {
-    const user = usersData.users.find(user => user.username === userName);
+    const user = usersData.find(user => user.username === userName);
     const favorites = user.favorites;
     const options = favorites.map(item => <option key={item}>{item}</option>);
     // Return the select element with the styled options
@@ -70,36 +70,33 @@ function App() {
     const passwordInput = document.getElementById('password');
   
     const username = usernameInput.value;
-    const userExists = usersData.users.find(user => user.username === username);
+    const user = usersData.find(user => user.username === username);
   
-    const password = passwordInput.value;
-    const passwordMatch = usersData.users.find(user => user.username === username && user.password === password)
-  
-    const pay = usersData.users.find(user => user.username === username && user.password === password && user.pay === "yes")
-  
-    if (userExists && passwordMatch && pay) {
-      userName = usernameInput.value;
-      setUser("valid")
-      setHead(logout)
-      setFavorites(setFavs);
-      setMenuOpen(false); // Close the menu
-      setLoginVisible(false); // Hide login menu
-    }
-    else if (userExists && passwordMatch) {
-      userName = usernameInput.value;
-      usernameInput.value = '';
-      passwordInput.value = '';
-      setHead(payment)
-      setMenuOpen(false); // Close the menu
-      setLoginVisible(false); // Hide login menu
-    }
-    else if (userExists) {
-      alert("Špatně zadané heslo.")
-    }
-    else {
-      alert("Uživatelské jméno neexistuje nebo je špatně zadané")
+    if (user) {
+      const password = passwordInput.value;
+      if (user.password === password) {
+        if (user.pay === "yes") {
+          // User has paid, proceed with login
+          userName = username;
+          setUser("valid");
+          setHead(logout);
+          setFavorites(setFavs);
+          setMenuOpen(false); // Close the menu
+          setLoginVisible(false); // Hide login menu
+        } else {
+          // Prompt user to pay first
+          setHead(payment);
+          setMenuOpen(false); // Close the menu
+          setLoginVisible(false); // Hide login menu
+        }
+      } else {
+        alert("Špatně zadané heslo.");
+      }
+    } else {
+      alert("Uživatelské jméno neexistuje nebo je špatně zadané");
     }
   };
+  
   
   const handleRegistration = () => {
     const usernameInput = document.getElementById('username');
@@ -115,10 +112,14 @@ function App() {
     })
     .then(response => {
       if (response.status === 201) {
-        // Handle successful registration, e.g., redirect to another page
-        window.location.href = '/success';
+        // Handle successful registration, e.g., prompt for payment
+        setHead(payment); // Display payment form
+        setLoginVisible(false); // Hide registration form
+      } else if (response.status === 400) {
+        // Account with the same username already exists
+        alert('An account with the same username already exists. Please choose a different username.');
       } else {
-        // Handle registration error
+        // Handle other registration errors
         alert('Registration failed. Please try again.');
       }
     })
@@ -127,6 +128,36 @@ function App() {
       alert('An error occurred during registration.');
     });
   };
+  
+  const handlePayment = () => {
+    const cardInput = document.getElementById('cardnumber');
+    const validInput = document.getElementById('validity');
+    const cvcInput = document.getElementById('cvc');
+  
+    if (cardInput.value.length !== 19) {
+      alert("Karta musí být formátu XXXX XXXX XXXX XXXX.")
+    } else if (validInput.value.length !== 5) {
+      alert("MM/YY.")
+    } else if (cvcInput.value.length !== 3) {
+      alert("Zadejte CVC ve formátu XXX.")
+    } else {
+      // Payment successful, proceed with login
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      // Update user data (assuming usersData is accessible here)
+      usersData.push({ username, password, pay: "yes" });
+  
+      // Set user as logged in
+      userName = username;
+      setUser("valid");
+      setHead(logout);
+      setMenuOpen(false); // Close the menu
+      setLoginVisible(false); // Hide login menu
+    }
+  };
+  
+
 
   const handleLogout = () => {
     userName = ""
@@ -134,28 +165,6 @@ function App() {
     setHead(login)
   }
   
-  
-  const handlePayment = () => {
-    const cardInput = document.getElementById('cardnumber');
-    const validInput = document.getElementById('validity');
-    const cvcInput = document.getElementById('cvc');
-
-    if (cardInput.value.length !== 19) {
-      alert("Karta musí být formátu XXXX XXXX XXXX XXXX.")
-    }
-
-    else if (validInput.value.length !== 5) {
-      alert("MM/YY.")
-    }
-
-    else if (cvcInput.value.length !== 3) {
-      alert("Zadejte CVC ve formátu XXX.")
-    }
-    else {
-      setUser("valid")
-      setHead(logout)
-    }
-  }
 
   const login = (
     <div className="head">
