@@ -112,9 +112,8 @@ function App() {
     })
     .then(response => {
       if (response.status === 201) {
-        // Handle successful registration, e.g., prompt for payment
-        setHead(payment); // Display payment form
-        setLoginVisible(false); // Hide registration form
+        // Handle successful registration, e.g., redirect to another page
+        window.location.href = '/success';
       } else if (response.status === 400) {
         // Account with the same username already exists
         alert('An account with the same username already exists. Please choose a different username.');
@@ -127,36 +126,7 @@ function App() {
       console.error('Error during registration:', error);
       alert('An error occurred during registration.');
     });
-  };
-  
-  const handlePayment = () => {
-    const cardInput = document.getElementById('cardnumber');
-    const validInput = document.getElementById('validity');
-    const cvcInput = document.getElementById('cvc');
-  
-    if (cardInput.value.length !== 19) {
-      alert("Karta musí být formátu XXXX XXXX XXXX XXXX.")
-    } else if (validInput.value.length !== 5) {
-      alert("MM/YY.")
-    } else if (cvcInput.value.length !== 3) {
-      alert("Zadejte CVC ve formátu XXX.")
-    } else {
-      // Payment successful, proceed with login
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      
-      // Update user data (assuming usersData is accessible here)
-      usersData.push({ username, password, pay: "yes" });
-  
-      // Set user as logged in
-      userName = username;
-      setUser("valid");
-      setHead(logout);
-      setMenuOpen(false); // Close the menu
-      setLoginVisible(false); // Hide login menu
-    }
-  };
-  
+};
 
 
   const handleLogout = () => {
@@ -165,6 +135,28 @@ function App() {
     setHead(login)
   }
   
+  
+  const handlePayment = () => {
+    const cardInput = document.getElementById('cardnumber');
+    const validInput = document.getElementById('validity');
+    const cvcInput = document.getElementById('cvc');
+
+    if (cardInput.value.length !== 19) {
+      alert("Karta musí být formátu XXXX XXXX XXXX XXXX.")
+    }
+
+    else if (validInput.value.length !== 5) {
+      alert("MM/YY.")
+    }
+
+    else if (cvcInput.value.length !== 3) {
+      alert("Zadejte CVC ve formátu XXX.")
+    }
+    else {
+      setUser("valid")
+      setHead(logout)
+    }
+  }
 
   const login = (
     <div className="head">
