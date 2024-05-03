@@ -1,16 +1,6 @@
-{
-    "users": [
-      {
-        "username": "test",
-        "password": "test",
-        "pay": "yes",
-        "favorites": ["New Orleans", "London", "Djibouti"]
-      },
-      {
-        "username": "test2",
-        "password": "test2",
-        "pay": "no",
-        "favorites": ["Paris", "Liberec", "Tokyo"]
-      }
-    ]
+[
+  {
+    "username": "bomba",
+    "password": "baomba"
   }
+]
