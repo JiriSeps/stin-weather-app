@@ -1,5 +1,5 @@
 
-export const apiKey = "8c6e4ca731a7f27e026b808fe70ff639";
+export const apiKey = "###################";
 export const apiAdress = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
 
 export const historyApi = "https://api.open-meteo.com/v1/forecast?";
