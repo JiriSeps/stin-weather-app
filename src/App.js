@@ -16,7 +16,6 @@ import rainImage from './assets/rain.png'
 import usersData from './users.json';
 import hamburgerImage from './assets/hamburger.png'
 import './index.css'; // Import CSS file
-import './currentDate.js';
 import { apiKey, apiAdress, historyApi, historyApiSet } from './api';
 import axios from 'axios';
 
@@ -50,17 +49,13 @@ function App() {
         {options}
       </select>
     );
-  
-    // Render the select element
+
     setFavorites(selectElement);
   }
-
   const setFavoritesButton = (
     <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
   );
   
-  
-  // Function to handle menu toggle
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
@@ -75,20 +70,12 @@ function App() {
     if (user) {
       const password = passwordInput.value;
       if (user.password === password) {
-        if (user.pay === "yes") {
-          // User has paid, proceed with login
           userName = username;
           setUser("valid");
           setHead(logout);
-          setFavorites(setFavs);
-          setMenuOpen(false); // Close the menu
-          setLoginVisible(false); // Hide login menu
-        } else {
-          // Prompt user to pay first
-          setHead(payment);
-          setMenuOpen(false); // Close the menu
-          setLoginVisible(false); // Hide login menu
-        }
+          //setFavorites(setFavs);
+          setMenuOpen(false);
+          setLoginVisible(false);
       } else {
         alert("Špatně zadané heslo.");
       }
@@ -97,15 +84,23 @@ function App() {
     }
   };
   
-  
-  const handleRegistration = () => {
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-  
-    // Send registration data to server
+  const handlePayment = (username, password) => {
+    const cardInput = document.getElementById('cardnumber');
+    const validInput = document.getElementById('validity');
+    const cvcInput = document.getElementById('cvc');
+
+    if (cardInput.value.length !== 19) {
+        alert("Karta musí být formátu XXXX XXXX XXXX XXXX.");
+        return;
+    } else if (validInput.value.length !== 5) {
+        alert("MM/YY.");
+        return;
+    } else if (cvcInput.value.length !== 3) {
+        alert("Zadejte CVC ve formátu XXX.");
+        return;
+    }
+
+    // Save username and password
     axios.post('http://localhost:8081/register', {
       username,
       password
@@ -128,6 +123,33 @@ function App() {
     });
 };
 
+const handleRegistration = () => {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    // Handle login
+    const user = usersData.find(user => user.username === username);
+    if (user) {
+        alert("An account with the same username already exists. Please choose a different username.");
+        return;
+    }
+
+    // Redirect to payment
+    setHead(payment);
+};
+
+const handlePaymentClick = () => {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    handlePayment(username, password);
+};
 
   const handleLogout = () => {
     userName = ""
