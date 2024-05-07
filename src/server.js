@@ -123,6 +123,45 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/set-favorites', (req, res) => {
+  const { username, favorite } = req.body;
+
+  if (!username || !favorite) {
+      return res.status(400).json({ error: 'Username and favorite location are required.' });
+  }
+
+  fs.readFile('users.json', 'utf8', (err, data) => {
+      if (err) {
+          console.error('Error reading users file:', err);
+          return res.status(500).json({ error: 'Internal server error.' });
+      }
+
+      let users;
+      try {
+          users = JSON.parse(data);
+      } catch (parseError) {
+          console.error('Error parsing users JSON:', parseError);
+          return res.status(500).json({ error: 'Internal server error.' });
+      }
+
+      const userIndex = users.findIndex(user => user.username === username);
+      if (userIndex === -1) {
+          return res.status(404).json({ error: 'User not found.' });
+      }
+
+      // Update user's favorites
+      users[userIndex].favorites.push(favorite);
+
+      fs.writeFile('users.json', JSON.stringify(users, null, 2), (writeErr) => {
+          if (writeErr) {
+              console.error('Error writing users file:', writeErr);
+              return res.status(500).json({ error: 'Internal server error.' });
+          }
+          res.status(200).json({ message: 'Favorites updated successfully.' });
+      });
+  });
+});
+
 app.listen(8081, () => {
     console.log(`Server is running on port 8081...`);
 });

@@ -15,7 +15,7 @@ import rainNImage from './assets/rainn.png'
 import rainImage from './assets/rain.png'
 import usersData from './users.json';
 import hamburgerImage from './assets/hamburger.png'
-import './index.css'; // Import CSS file
+import './index.css';
 import { apiKey, apiAdress, historyApi, historyApiSet } from './api';
 import axios from 'axios';
 
@@ -37,22 +37,45 @@ function App() {
   const [lat, setLat] = useState("");
   const [weatherHistory, setWeatherHistory] = useState([]);
   
-
   const setFavs = () => {
-    const user = usersData.find(user => user.username === userName);
-    const favorites = user.favorites;
-    const options = favorites.map(item => <option key={item}>{item}</option>);
-    const selectElement = (
-      <select className="favorites-select">
-        <option></option>
-        {options}
-      </select>
-    );
-    setFavorites(selectElement);
-  }
-  const setFavoritesButton = (
-    <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
+    axios.post('http://localhost:8081/set-favorites', {
+        username: userName,
+        favorite: searchedCity
+    })
+    .then(response => {
+        console.log(response.data.message);
+        // Optionally, update UI or show success message
+    })
+    .catch(error => {
+        console.error('Error setting favorites:', error.response.data.error);
+        // Optionally, show error message to the user
+    });
+};
+const selectFavs = () => {
+  const user = usersData.find((user) => user.username === userName);
+  const favorites = user.favorites;
+  const options = favorites.map((item) => (
+    <option key={item} value={item}>
+      {item}
+    </option>
+  ));
+  const handleSelectChange = (event) => {
+    const selectedLocation = event.target.value;
+    setSearchedCity(selectedLocation); // Update searchedCity state with selected location
+  };
+
+  const selectElement = (
+    <select className="favorites-select" onChange={handleSelectChange}>
+      <option></option>
+      {options}
+    </select>
   );
+  setFavorites(selectElement);
+};
+
+const setFavoritesButton = (
+  <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
+);
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
@@ -73,7 +96,7 @@ function App() {
           userName = username;
           setUser("valid");
           setHead(logout);
-          setFavorites(setFavs);
+          setFavorites(selectFavs);
           setMenuOpen(false);
           setLoginVisible(false);
         } else {
@@ -189,7 +212,7 @@ const handlePaymentClick = () => {
     </div>
   );
 
-   const handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchedCity(event.target.value);
       event.target.value = "";
