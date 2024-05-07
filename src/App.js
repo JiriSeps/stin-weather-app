@@ -15,8 +15,7 @@ import rainNImage from './assets/rainn.png'
 import rainImage from './assets/rain.png'
 import usersData from './users.json';
 import hamburgerImage from './assets/hamburger.png'
-import './index.css'; // Import CSS file
-import './currentDate.js';
+import './index.css';
 import { apiKey, apiAdress, historyApi, historyApiSet } from './api';
 import axios from 'axios';
 
@@ -25,9 +24,9 @@ var userName = "";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginVisible, setLoginVisible] = useState(false); // State to manage login section visibility
-  const [user, setUser] = useState(''); // State to store the current username
-  const [favorites, setFavorites] = useState(""); // Stav pro uložení vygenerovaného select elementu
+  const [loginVisible, setLoginVisible] = useState(false);
+  const [user, setUser] = useState(''); 
+  const [favorites, setFavorites] = useState("");
   const [temperature, setTemperature] = useState("Loading...");
   const [humidity, setHumidity] = useState("Loading...");
   const [wind, setWind] = useState("Loading...");
@@ -38,29 +37,46 @@ function App() {
   const [lat, setLat] = useState("");
   const [weatherHistory, setWeatherHistory] = useState([]);
   
-
   const setFavs = () => {
-    const user = usersData.find(user => user.username === userName);
-    const favorites = user.favorites;
-    const options = favorites.map(item => <option key={item}>{item}</option>);
-    // Return the select element with the styled options
-    const selectElement = (
-      <select className="favorites-select">
-        <option></option>
-        {options}
-      </select>
-    );
-  
-    // Render the select element
-    setFavorites(selectElement);
-  }
+    axios.post('http://localhost:8081/set-favorites', {
+        username: userName,
+        favorite: searchedCity
+    })
+    .then(response => {
+        console.log(response.data.message);
+        // Optionally, update UI or show success message
+    })
+    .catch(error => {
+        console.error('Error setting favorites:', error.response.data.error);
+        // Optionally, show error message to the user
+    });
+};
+const selectFavs = () => {
+  const user = usersData.find((user) => user.username === userName);
+  const favorites = user.favorites;
+  const options = favorites.map((item) => (
+    <option key={item} value={item}>
+      {item}
+    </option>
+  ));
+  const handleSelectChange = (event) => {
+    const selectedLocation = event.target.value;
+    setSearchedCity(selectedLocation); // Update searchedCity state with selected location
+  };
 
-  const setFavoritesButton = (
-    <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
+  const selectElement = (
+    <select className="favorites-select" onChange={handleSelectChange}>
+      <option></option>
+      {options}
+    </select>
   );
-  
-  
-  // Function to handle menu toggle
+  setFavorites(selectElement);
+};
+
+const setFavoritesButton = (
+  <button className="set-favorites-btn" onClick={setFavs}>Set Favorites</button>
+);
+
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
@@ -70,64 +86,82 @@ function App() {
     const passwordInput = document.getElementById('password');
   
     const username = usernameInput.value;
-    const user = usersData.find(user => user.username === username);
+    const password = passwordInput.value;
   
-    if (user) {
-      const password = passwordInput.value;
-      if (user.password === password) {
-        if (user.pay === "yes") {
-          // User has paid, proceed with login
+    // Send login credentials to the server using Axios
+    axios.post('http://localhost:8081/login', { username, password })
+      .then(response => {
+        if (response.data.success) {
+          // Handle successful login
           userName = username;
           setUser("valid");
           setHead(logout);
-          setFavorites(setFavs);
-          setMenuOpen(false); // Close the menu
-          setLoginVisible(false); // Hide login menu
+          setFavorites(selectFavs);
+          setMenuOpen(false);
+          setLoginVisible(false);
         } else {
-          // Prompt user to pay first
-          setHead(payment);
-          setMenuOpen(false); // Close the menu
-          setLoginVisible(false); // Hide login menu
+          // Handle login failure
+          alert(response.data.error);
         }
-      } else {
-        alert("Špatně zadané heslo.");
-      }
-    } else {
-      alert("Uživatelské jméno neexistuje nebo je špatně zadané");
-    }
+      })
+      .catch(error => {
+        console.error('Error logging in:', error);
+        alert('Error logging in. Please try again.');
+      });
   };
   
-  
-  const handleRegistration = () => {
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-  
-    // Send registration data to server
+  const handlePayment = (username, password) => {
+    const cardInput = document.getElementById('cardnumber');
+    const validInput = document.getElementById('validity');
+    const cvcInput = document.getElementById('cvc');
+
+    if (cardInput.value.length !== 19) {
+        alert("Karta musí být formátu XXXX XXXX XXXX XXXX.");
+        return;
+    } else if (validInput.value.length !== 5) {
+        alert("MM/YY.");
+        return;
+    } else if (cvcInput.value.length !== 3) {
+        alert("Zadejte CVC ve formátu XXX.");
+        return;
+    }
+
     axios.post('http://localhost:8081/register', {
-      username,
-      password
+        username,
+        password
     })
     .then(response => {
-      if (response.status === 201) {
-        // Handle successful registration, e.g., redirect to another page
-        window.location.href = '/success';
-      } else if (response.status === 400) {
-        // Account with the same username already exists
-        alert('An account with the same username already exists. Please choose a different username.');
-      } else {
-        // Handle other registration errors
-        alert('Registration failed. Please try again.');
-      }
+        if (response.status === 201) {
+            alert("Registration successful!");
+            window.location.href = '/success';
+        } else {
+            alert('Registration failed. Please try again.');
+        }
     })
     .catch(error => {
-      console.error('Error during registration:', error);
-      alert('An error occurred during registration.');
+        console.error('Error during registration:', error);
+        alert('An error occurred during registration.');
     });
 };
 
+const handleRegistration = () => {
+    const usernameInput = document.getElementById('username');
+    const username = usernameInput.value;
+    const user = usersData.find(user => user.username === username);
+    if (user) {
+        alert("An account with the same username already exists. Please choose a different username.");
+        return;
+    }
+    setHead(payment);
+};
+
+const handlePaymentClick = () => {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');  
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    handlePayment(username, password);
+};
 
   const handleLogout = () => {
     userName = ""
@@ -135,28 +169,6 @@ function App() {
     setHead(login)
   }
   
-  
-  const handlePayment = () => {
-    const cardInput = document.getElementById('cardnumber');
-    const validInput = document.getElementById('validity');
-    const cvcInput = document.getElementById('cvc');
-
-    if (cardInput.value.length !== 19) {
-      alert("Karta musí být formátu XXXX XXXX XXXX XXXX.")
-    }
-
-    else if (validInput.value.length !== 5) {
-      alert("MM/YY.")
-    }
-
-    else if (cvcInput.value.length !== 3) {
-      alert("Zadejte CVC ve formátu XXX.")
-    }
-    else {
-      setUser("valid")
-      setHead(logout)
-    }
-  }
 
   const login = (
     <div className="head">
@@ -191,7 +203,7 @@ function App() {
         <input type="text" id="cvc" placeholder="CVC"></input>
       </div>
     </div>
-    <button onClick={handlePayment}>Zaplatit</button>
+    <button onClick={handlePaymentClick}>Zaplatit</button>
   </div>
   );
   const logout = (
@@ -200,7 +212,7 @@ function App() {
     </div>
   );
 
-   const handleKeyDown = (event) => {
+  const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       setSearchedCity(event.target.value);
       event.target.value = "";
@@ -285,7 +297,7 @@ function App() {
       const historyData = [];
       for (let i = 0; i < 7; i++) {
         const currentDate = new Date();
-        currentDate.setDate(currentDate.getDate() - i - 1); // Subtract i + 1 days to get historical dates
+        currentDate.setDate(currentDate.getDate() - i - 1);
         const year = currentDate.getFullYear();
         const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
         const day = currentDate.getDate().toString().padStart(2, '0');
@@ -306,7 +318,7 @@ function App() {
           snow: parseFloat(data.daily.snowfall_sum)
         });
       }
-      setWeatherHistory(historyData.reverse()); // Reverse the array to display the oldest date first
+      setWeatherHistory(historyData.reverse());
     };
   
     fetchData().catch(error => {

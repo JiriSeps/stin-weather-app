@@ -1,6 +1,32 @@
 [
   {
-    "username": "bomba",
-    "password": "baomba"
+    "username": "asd",
+    "password": "$2b$10$KpF4VEne66egIpbbh6Lcc.sikMs5AlLs7BGYOdzVuHxm.PZq1sH9m",
+    "favorites": [
+      "Jakarta",
+      "Tanvald"
+    ]
+  },
+  {
+    "username": "martin",
+    "password": "$2b$10$sYyQpp.sSV77aNP4g.ShZu5M.dKeOaAPuBtIx2LqeXu5Ckjj.aHTe",
+    "favorites": [
+      "Liberec",
+      "Tanvald",
+      "Jakarta",
+      "New Orleans",
+      "Tanvald"
+    ]
+  },
+  {
+    "username": "ahoj",
+    "password": "$2b$10$XK52GVTTC97QObGEdcTgdug/gWvzO6A6NJUFnYM5Q8/Lg5mJsog8K",
+    "favorites": [
+      "Prague",
+      "Palermo",
+      "Liberec",
+      "Zlin",
+      "Svitavy"
+    ]
   }
 ]
