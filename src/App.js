@@ -38,7 +38,7 @@ function App() {
   const [weatherHistory, setWeatherHistory] = useState([]);
   
   const setFavs = () => {
-    axios.post('https://stin-weather-app.onrender.com/set-favorites', {
+    axios.post('https://zippy-crepe-8e58e2.netlify.app/set-favorites', {
         username: userName,
         favorite: searchedCity
     })
@@ -89,7 +89,7 @@ const setFavoritesButton = (
     const password = passwordInput.value;
   
     // Send login credentials to the server using Axios
-    axios.post('https://stin-weather-app.onrender.com/login', { username, password })
+    axios.post('https://zippy-crepe-8e58e2.netlify.app/login', { username, password })
       .then(response => {
         if (response.data.success) {
           // Handle successful login
@@ -126,7 +126,7 @@ const setFavoritesButton = (
         return;
     }
 
-    axios.post('https://stin-weather-app.onrender.com/register', {
+    axios.post('https://zippy-crepe-8e58e2.netlify.app/register', {
         username,
         password
     })
