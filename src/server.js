@@ -7,7 +7,9 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'https://zippy-crepe-8e58e2.netlify.app/',
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all HTTP methods
+    allowedHeaders: '*', // Allow all headers
 };
 
 const port = process.env.PORT || 8081;
