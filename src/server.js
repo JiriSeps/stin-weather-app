@@ -22,13 +22,13 @@ app.post('/register', (req, res) => {
     }
 
     // Read existing users from users.json file
-    fs.readFile('/src/users.json', 'utf8', (err, data) => {
+    fs.readFile('users.json', 'utf8', (err, data) => {
         if (err) {
             if (err.code === 'ENOENT') {
                 // File doesn't exist, initialize users as an empty array
                 const users = [];
                 // Write an empty array to users.json file
-                fs.writeFile('/src/users.json', '[]', (writeErr) => {
+                fs.writeFile('users.json', '[]', (writeErr) => {
                     if (writeErr) {
                         console.error('Error writing users file:', writeErr);
                         return res.status(500).json({ error: 'Internal server error.' });
@@ -67,7 +67,7 @@ app.post('/register', (req, res) => {
           // Add favorites array with "" to the user object
           users.push({ username, password: hashedPassword, favorites: [] });
       
-          fs.writeFile('/src/users.json', JSON.stringify(users, null, 2), (writeErr) => {
+          fs.writeFile('users.json', JSON.stringify(users, null, 2), (writeErr) => {
               if (writeErr) {
                   console.error('Error writing users file:', writeErr);
                   return res.status(500).json({ error: 'Internal server error.' });
@@ -85,7 +85,7 @@ app.post('/login', (req, res) => {
     return res.status(400).json({ error: 'Username and password are required.' });
   }
 
-  fs.readFile('/src/users.json', 'utf8', (err, data) => {
+  fs.readFile('users.json', 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading users file:', err);
       return res.status(500).json({ error: 'Internal server error.' });
@@ -130,7 +130,7 @@ app.post('/set-favorites', (req, res) => {
       return res.status(400).json({ error: 'Username and favorite location are required.' });
   }
 
-  fs.readFile('/src/users.json', 'utf8', (err, data) => {
+  fs.readFile('users.json', 'utf8', (err, data) => {
       if (err) {
           console.error('Error reading users file:', err);
           return res.status(500).json({ error: 'Internal server error.' });
@@ -152,7 +152,7 @@ app.post('/set-favorites', (req, res) => {
       // Update user's favorites
       users[userIndex].favorites.push(favorite);
 
-      fs.writeFile('/src/users.json', JSON.stringify(users, null, 2), (writeErr) => {
+      fs.writeFile('users.json', JSON.stringify(users, null, 2), (writeErr) => {
           if (writeErr) {
               console.error('Error writing users file:', writeErr);
               return res.status(500).json({ error: 'Internal server error.' });
