@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'https://stin-weather-app.onrender.com/',
+    origin: 'https://zippy-crepe-8e58e2.netlify.app/',
 };
 
 const port = process.env.PORT || 8081;
