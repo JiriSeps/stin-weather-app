@@ -38,7 +38,7 @@ function App() {
   const [weatherHistory, setWeatherHistory] = useState([]);
   
   const setFavs = () => {
-    axios.post('http://localhost:8081/set-favorites', {
+    axios.post('https://stin-weather-app.onrender.com/set-favorites', {
         username: userName,
         favorite: searchedCity
     })
@@ -89,7 +89,7 @@ const setFavoritesButton = (
     const password = passwordInput.value;
   
     // Send login credentials to the server using Axios
-    axios.post('http://localhost:8081/login', { username, password })
+    axios.post('https://stin-weather-app.onrender.com//login', { username, password })
       .then(response => {
         if (response.data.success) {
           // Handle successful login
@@ -126,7 +126,7 @@ const setFavoritesButton = (
         return;
     }
 
-    axios.post('http://localhost:8081/register', {
+    axios.post('https://stin-weather-app.onrender.com/register', {
         username,
         password
     })

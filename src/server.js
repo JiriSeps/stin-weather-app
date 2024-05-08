@@ -7,8 +7,10 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'https://stin-weather-app.onrender.com/',
 };
+
+const port = process.env.PORT || 8081;
 
 app.use(cors(corsOptions));
 
@@ -162,6 +164,6 @@ app.post('/set-favorites', (req, res) => {
   });
 });
 
-app.listen(8081, () => {
+app.listen(port, () => {
     console.log(`Server is running on port 8081...`);
 });

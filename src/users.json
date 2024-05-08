@@ -15,7 +15,9 @@
       "Tanvald",
       "Jakarta",
       "New Orleans",
-      "Tanvald"
+      "Tanvald",
+      "Los Angeles",
+      "chomutov"
     ]
   },
   {
@@ -27,6 +29,33 @@
       "Liberec",
       "Zlin",
       "Svitavy"
+    ]
+  },
+  {
+    "username": "Honda",
+    "password": "$2b$10$UzKuiubeGT5K19Jjech3veNhRPWLAgwOoFeXB.7tM0ovdmYF6LZPu",
+    "favorites": [
+      "Tanvald",
+      "Prague"
+    ]
+  },
+  {
+    "username": "jirka",
+    "password": "$2b$10$8MF4r/04kI4A3S50cbRay.l/NGWCZIYwTLeh4SGFiHaxVr5.a4LgG",
+    "favorites": [
+      "Liberec"
+    ]
+  },
+  {
+    "username": "123",
+    "password": "$2b$10$VEHmccI.wXAfZqsOxXcSQ.yXlquywGrDWmT6nw.eW9rjBMeith3WG",
+    "favorites": []
+  },
+  {
+    "username": "denis",
+    "password": "$2b$10$aF3vv.1l8.j/0YZcTScZ0.GezAXhtg7XtjuB0WWAQBrBF8fz/J7k6",
+    "favorites": [
+      "Chomutov"
     ]
   }
 ]
