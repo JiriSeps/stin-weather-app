@@ -133,7 +133,7 @@ const setFavoritesButton = (
     .then(response => {
         if (response.status === 201) {
             alert("Registration successful!");
-            window.location.href = '/success';
+            window.location.href = 'https://stin-weather-app.onrender.com/success';
         } else {
             alert('Registration failed. Please try again.');
         }
