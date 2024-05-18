@@ -89,7 +89,7 @@ const setFavoritesButton = (
     const password = passwordInput.value;
   
     // Send login credentials to the server using Axios
-    axios.post('https://stin-weather-app.onrender.com//login', { username, password })
+    axios.post('https://stin-weather-app.onrender.com/login', { username, password })
       .then(response => {
         if (response.data.success) {
           // Handle successful login
