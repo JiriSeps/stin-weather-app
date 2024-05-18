@@ -7,7 +7,9 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'https://stin-weather-app.onrender.com/',
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all HTTP methods
+    allowedHeaders: '*', // Allow all headers
 };
 
 const port = process.env.PORT || 8081;
@@ -167,3 +169,4 @@ app.post('/set-favorites', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port 8081...`);
 });
+module.exports = app;
