@@ -1,10 +1,9 @@
 // Import necessary libraries
 import React from 'react';
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, fireEvent, waitFor, act} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import axios from 'axios';
 import App from './App.js'; // Assuming App component is in the same directory
-// import fetchMock from 'fetch-mock';
 
 const { JSDOM } = require('jsdom');
 const { window } = new JSDOM(`
@@ -360,3 +359,37 @@ describe('useWeatherData hook', () => {
   });
 });
 
+// describe('App functions', () => {
+//   describe('setFavs', () => {
+//     it('should call axios.post with correct parameters', async () => {
+//       const mockedResponse = { data: { message: 'Favorites set successfully' } };
+//       axios.post.mockResolvedValue(mockedResponse);
+
+//       await setFavs();
+
+//       expect(axios.post).toHaveBeenCalledWith('http://localhost:8081/set-favorites', {
+//         username: expect.any(String),
+//         favorite: expect.any(String)
+//       });
+//     });
+//   });
+
+//   describe('selectFavs', () => {
+//     it('should set favorites correctly', () => {
+//       // Mock user data
+//       const mockedUserData = [{ username: 'testUser', favorites: ['London', 'Paris'] }];
+//       jest.mock('./users.json', () => mockedUserData);
+
+//       // Render selectFavs function output
+//       const { getByTestId } = render(selectFavs());
+
+//       // Simulate change event
+//       fireEvent.change(getByTestId('favorites-select'), { target: { value: 'London' } });
+
+//       // Check if setSearchedCity has been called with the correct value
+//       expect(setSearchedCity).toHaveBeenCalledWith('London');
+//     });
+//   });
+
+//   // Add more tests for other functions if needed
+// });
