@@ -94,7 +94,7 @@ const setFavoritesButton = (
         if (response.data.success) {
           // Handle successful login
           userName = username;
-          setUser("valid");
+          setUser(username);
           setHead(logout);
           setFavorites(selectFavs);
           setMenuOpen(false);
@@ -133,7 +133,6 @@ const setFavoritesButton = (
     .then(response => {
         if (response.status === 201) {
             alert("Registration successful!");
-            window.location.href = '/success';
         } else {
             alert('Registration failed. Please try again.');
         }
@@ -383,8 +382,8 @@ const handlePaymentClick = () => {
           </div>
         )}
         {head}
-        <div class="search-container">
-          <input type="text" class="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
+        <div className="search-container">
+          <input type="text" className="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
         </div>
         <div className="weather">
           <h2 className="city">{city}</h2>
@@ -414,9 +413,9 @@ const handlePaymentClick = () => {
     return (
       <div className="block">
         {head}
-        <div class="search-container">
-          <input type="text" class="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
-          <div class="favs">
+        <div className="search-container">
+          <input type="text" className="search-input" placeholder="Zadejte město" onKeyDown={handleKeyDown}></input>
+          <div className="favs">
             {favorites}
           </div>
         </div>

@@ -7,8 +7,12 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all HTTP methods
+    allowedHeaders: '*', // Allow all headers
 };
+
+const port = process.env.PORT || 8081;
 
 app.use(cors(corsOptions));
 
@@ -162,6 +166,7 @@ app.post('/set-favorites', (req, res) => {
   });
 });
 
-app.listen(8081, () => {
+app.listen(port, () => {
     console.log(`Server is running on port 8081...`);
 });
+module.exports = app;
