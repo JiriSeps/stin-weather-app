@@ -411,3 +411,5 @@ describe('Registration Endpoint Error Handling', () => {
     expect(response.body).toHaveProperty('error', 'Internal server error.');
   });
 });
+
+
